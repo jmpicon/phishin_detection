@@ -4,9 +4,23 @@ from transformers import pipeline
 
 app = Flask(__name__)
 
+# Función para cargar un archivo con verificación
+def load_file(file_path):
+    try:
+        return joblib.load(file_path)
+    except EOFError:
+        print(f"Error: El archivo {file_path} está corrupto o incompleto.")
+        return None
+
 # Cargar modelo y vectorizador
-model = joblib.load('../models/phishing_model.pkl')
-vectorizer = joblib.load('../data/vectorizer.pkl')
+model = load_file('models/phishing_model.pkl')
+vectorizer = load_file('data/vectorizer.pkl')
+
+# Verificar si los archivos se cargaron correctamente
+if model is None or vectorizer is None:
+    print("Error al cargar el modelo o el vectorizador.")
+    exit()
+
 chatbot = pipeline('text-generation', model='gpt-2')
 
 def check_phishing(text):
@@ -26,3 +40,6 @@ def chatbot_response():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
