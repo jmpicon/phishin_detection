@@ -28,3 +28,4 @@ df = df.dropna(subset=['url', 'label'])
 # Guardar el DataFrame limpio
 df.to_csv(clean_data_path, index=False)
 print(f"Archivo CSV limpio guardado en {clean_data_path}")
+
